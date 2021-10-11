@@ -162,11 +162,13 @@ class ProductController extends Controller
 	private function validator($request) {
 
 		$validator = Validator::make($request->all(), [
-			'id' => 'nullable|nullable|required_if:_method,PUT',
-			'name' => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
-			'price' => 'numeric|required',
+
+			'id' 	      => 'nullable|nullable|required_if:_method,PUT',
+			'name' 	      => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
+			'price' 	  => 'numeric|required',
 			'description' => 'nullable|max:1000',
-			'category_id' => 'required|numeric|exists:categories,id'
+			'category_id' => 'required|numeric|exists:categories,id',
+
 		]);
 
 		return $validator;

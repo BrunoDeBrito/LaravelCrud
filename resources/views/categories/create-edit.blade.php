@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="main-title mt-4">
-        <h5>Categorias</h5>
+        <h5>Categorias {{ $category->id ? (' - #'.$category->id) : '' }}</h5>
         <p>Gerencie as categorias cadastradas</p>
     </div>
 

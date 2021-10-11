@@ -7,20 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * Models de Parametros
+ * Model de Parametros opcionais
  *
  * @author Bruno de Brito <bruno@sysout.com.br>
  * @since 08/10/2021 
  * @version 1.0.0
  */
-class Paramenter extends Model
+class ParameterOption extends Model
 {
     use HasFactory;
 
-    protected $table = 'parameters';
-
-    public $date = [
+    protected $table = 'parameters_options';
+    
+    public $dates = [
 
         'created_at', 'updated_at'
+    
     ];
+
 }

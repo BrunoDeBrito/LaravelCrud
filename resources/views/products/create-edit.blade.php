@@ -10,9 +10,8 @@
 	@include('partials._alert')
 
     <div class="row">
-        <form action="{{ url('produtos') }}" method="POST" class="col-12">
-            
-            @csrf
+        <form action="{{ url('produtos') }}" method="POST" class="col-12">            
+            @csrf            
             @method($product->id?'PUT':'POST')
 
             <input type="hidden" name="id" value="{{ $product->id }}"/>

@@ -8,8 +8,6 @@ $(function() {
         var $btn = $(this);
         var id = $btn.data('id');
 
-        console.log(id);
-
         if (id) {
 
             var htmlForm = `<form method="POST">
@@ -24,6 +22,38 @@ $(function() {
             $form.submit();
 
         }
+
+    });
+
+    $('main.parameters.create-edit').each(function() {
+
+        var $self = $(this);
+
+        var $btnAdd = $self.find('.btn-add');
+        var $table = $self.find('.option-list');
+
+        var $row = $table.find('tbody tr').eq(0).clone();
+        $row.find('input').val('');
+
+        $btnAdd.on('click', function() {
+
+            
+            if ($table.find('tbody tr').length < 10) {
+
+                var $newRow = $row.clone();
+                $table.find('tbody').append($newRow);
+
+            }
+
+        });
+
+        $table.on('click', 'tr td .btn-remove-option', function() {
+
+            if ($(this).closest('tbody').find('tr').length > 1) {
+                $(this).closest('tr').remove();
+            }
+
+        });
 
     });
 

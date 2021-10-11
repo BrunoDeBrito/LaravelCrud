@@ -13,7 +13,7 @@ class CreateParametersOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('paramenters_options', function (Blueprint $table) {
+        Schema::create('parameters_options', function (Blueprint $table) {
 
             $table->id();
 

@@ -38,18 +38,6 @@ class Category extends Model
 	 */
 	public function scopeSearch($query, $request) {
 
-		// $query->from('categories as c')
-		// ->join('products as p', 'p.id', 'c.name')
-		// ->where(function($query) use ($request) {
-
-		// 	$query->where('p.name', 'ilike', '%'.$request->search.'%')
-		// 	->orWhere('c.name', 'like', '%'.$request->search.'%')
-		// 	->orwere('p.desciptions', 'ilke', '%'.$request->search.'%');
-
-		// })->select('p.*', 'p.descripions');
-
-		// return $query;
-
 		$query->from('categories as c')
 		->where(function($query) use ($request) {
 
@@ -58,7 +46,5 @@ class Category extends Model
 		});
 
 		return $query;
-
-
 	}
 }

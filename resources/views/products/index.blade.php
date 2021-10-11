@@ -14,6 +14,7 @@
     </form>
 
     <div class="table-responsive">
+
         <h3 class="center"> Lista de produtos </h3>
         <table class="table table-striped">
 
@@ -49,9 +50,11 @@
             </tbody>
             
         </table>
+        
     </div>
+
 	<div class="main-controls text-right mt-2">
-        <a class="btn btn-primary" href="{{ url('produtos/criar') }}">Novo Produtos</a>
+        <a class="btn btn-primary" href="{{ url('produto/criar') }}">Novo Produtos</a>
     </div>
 
 @endsection

@@ -25,7 +25,6 @@ class Product extends Model
 		return $this->belongsTo(Category::class);
 	}
 
-
 	/**
 	 * Pesquisa por produtos
 	 *

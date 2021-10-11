@@ -35,6 +35,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('produtos') }}">Produtos</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('parametros') }}">Parametros</a>
+                        </li>
                     </ul>
                     {{-- <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -44,7 +47,7 @@
             </div>
         </nav>
     </header>
-    <main>
+    <main class="{{ $mainClass ?? '' }}">
         <div class="container">
             @yield('content')
         </div>
