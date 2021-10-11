@@ -3,14 +3,14 @@
 @section('content')
 
     <div class="main-title mt-4">
-        <h5>Categorias</h5>
-        <p>Gerencie as categorias cadastradas</p>
+        <h5>Produtos</h5>
+        <p>Gerencie os Produtos cadastrados</p>
     </div>
 
     @include('partials._alert')
 
     <form class="form-filters mb-4">
-        <input type="text" name="search" class="form-control" value="{{ Request::get('search') }}"placeholder="Pesquise por algo..."/>
+        <input type="text" name="search" class="form-control" value="{{ Request::get('search') }}" placeholder="Pesquise por algo..."/>
     </form>
 
     <div class="table-responsive">
@@ -36,7 +36,7 @@
                         <td> {{ $product->id }} </td>
                         <td> {{ $product->category_name }} </td>
                         <td> {{ $product->name }} </td>
-                        <td> {{ $product->price }} </td>
+                        <td> {{ $product->price }}R$ </td>
                         <td> {{ $product->descriptions }} </td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ url('produtos/'.$product->id.'/editar') }}"><i class="material-icons">edit</i></a>

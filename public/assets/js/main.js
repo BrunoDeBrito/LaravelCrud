@@ -4,10 +4,8 @@ $(function() {
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     $('.btn-remove').on('click', function() {
-        
-        console.log('entrou');
-        var $btn = $(this);
 
+        var $btn = $(this);
         var id = $btn.data('id');
 
         console.log(id);

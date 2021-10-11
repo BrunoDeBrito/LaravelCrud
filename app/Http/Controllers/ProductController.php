@@ -28,7 +28,7 @@ class ProductController extends Controller
 		->orderBy('name', 'asc')
 		->get();
 		
-		return view('products.index', compact('products'));
+		return view('products.index', [ 'products' => $products ]);
 
 	}
 
@@ -72,10 +72,7 @@ class ProductController extends Controller
 
 	/**
 	 ** Apresenta formulario de atualização dos Produtos
-	 *
-	 * @param Product $products
-	 * @param interger $id
-	 * @return void
+	 *compact('products')
 	 */
 	public function edit(Request $request, $id) {
 

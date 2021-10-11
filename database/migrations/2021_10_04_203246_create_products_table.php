@@ -7,29 +7,28 @@ use Illuminate\Support\Facades\Schema;
 class CreateProductsTable extends Migration
 {
 
-  public function up() {
+  public function up()
+  {
 
     Schema::create('products', function (Blueprint $table) {
 
       $table->bigIncrements('id');
 
-	  $table->unsignedBigInteger('category_id');
+      $table->unsignedBigInteger('category_id');
 
       $table->string('name', 100);
       $table->float('price');
       $table->text('descriptions')->nullable();
 
-      $table->foreign('category_id')->references('id')->on('categories');
-
+      $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
 
       $table->timestamps();
-
     });
   }
 
-  public function down() {
+  public function down()
+  {
 
     Schema::dropIfExists('products');
-
   }
 }

@@ -7,7 +7,11 @@
         <p>Gerencie as categorias cadastradas</p>
     </div>
 
-    @include('partials._alert')    
+    @include('partials._alert')
+
+    <form>
+        <input type="text" name="search" class="form-control" value="{{ Request::get('search') }}" placeholder="Pesquise Algo...">
+    </form>
 
     <div class="table-responsive">
         <table class="table table-striped">

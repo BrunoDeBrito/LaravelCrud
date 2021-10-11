@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Rota de listagem de Categorias
+//Rota de Categorias
 Route::get('/categorias',             'CategoryController@index');
 
 Route::get('/categorias/criar',       'CategoryController@create');
@@ -28,7 +28,7 @@ Route::put('/categorias',             'CategoryController@update');
 
 Route::delete('/categorias',          'CategoryController@delete');
 
-//Rota de listagem de Categorias
+//Rota de Produtos
 Route::get('/produtos',             'ProductController@index');
 
 Route::get('/produtos/criar',       'ProductController@create');

@@ -22,11 +22,12 @@ class CategoryController extends Controller
 	 *
 	 * @return void
 	 */
-	public function index() {
+	public function index(Request $request) {
 
-		$categories = Category::all();
+		$categories = Category::search($request)
+		->get();
 
-		return view('categories.index', compact('categories'));
+		return view('categories.index', [ 'categories' => $categories ]);
 
 	}
 
@@ -39,7 +40,7 @@ class CategoryController extends Controller
 	public function create(Request $request) {
 
 		return $this->form($request, new Category());
-		
+				
 	}
 
 	/**
@@ -58,12 +59,15 @@ class CategoryController extends Controller
 			$category = new Category();
 			$this->save($request, $category);
 	
-			return redirect('categorias')->withSuccess('Categoria cadastrada com sucesso!');
+			return redirect('categorias')
+			->withSuccess('Categoria cadastrada com sucesso!');
 
 		} else {
-			return back()->withErrors($validator->errors()->first());
-		}
 
+			return back()->withErrors($validator->errors()->first());
+
+		}
+		
 	}
 
 	/**
@@ -108,14 +112,18 @@ class CategoryController extends Controller
 
 				$this->save($request, $category);
 
-				return redirect('categorias')->withSuccess('Categoria alterada com sucesso!');
+				return redirect('categorias')
+				->withSuccess('Categoria alterada com sucesso!');
 
 			} else {
+
 				return back()->withErrors('Categoria inválida!');
 			}
 
 		} else {
+
 			return back()->withErrors($validator->errors()->first());
+
 		}
 
 	}
@@ -126,6 +134,7 @@ class CategoryController extends Controller
 	 * @return void
 	 */
 	private function form($request, $category) {
+
 		return view('categories.create-edit', [ 'category' => $category ]);
 	}
 
@@ -152,7 +161,8 @@ class CategoryController extends Controller
 
 		$validator = Validator::make($request->all(), [
 			'id' => 'nullable|numeric|required_if:_method,PUT',
-			'name' => 'required|string|max:100|unique:categories,name'.($request->id?(','.$request->id):''),
+			'name' => 'required|string|max:100|unique:categories,name'
+			.($request->id?(','.$request->id):''),
 		]);
 
 		return $validator;

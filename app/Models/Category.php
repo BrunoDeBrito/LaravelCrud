@@ -24,8 +24,41 @@ class Category extends Model
 	 *
 	 * @return void
 	 */
-	public function products()
-	{
+	public function products() {
+
 		return $this->hasMany(Product::class);
+	}
+
+	/**
+	 * Pesquisa por Categorias
+	 *
+	 * @param [type] $query
+	 * @param Request $request
+	 * @return object
+	 */
+	public function scopeSearch($query, $request) {
+
+		// $query->from('categories as c')
+		// ->join('products as p', 'p.id', 'c.name')
+		// ->where(function($query) use ($request) {
+
+		// 	$query->where('p.name', 'ilike', '%'.$request->search.'%')
+		// 	->orWhere('c.name', 'like', '%'.$request->search.'%')
+		// 	->orwere('p.desciptions', 'ilke', '%'.$request->search.'%');
+
+		// })->select('p.*', 'p.descripions');
+
+		// return $query;
+
+		$query->from('categories as c')
+		->where(function($query) use ($request) {
+
+			$query->where('c.name', 'ilike', '%'.$request->search.'%');
+			
+		});
+
+		return $query;
+
+
 	}
 }
