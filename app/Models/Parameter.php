@@ -16,6 +16,15 @@ use Illuminate\Database\Eloquent\Model;
 class Parameter extends Model
 {
     use HasFactory;
+    /**
+     * Obetem as opções do parametro
+     *
+     * @return void
+     */
+    public function paramenterOption() {
+
+        return $this->hasMany(ParameterOption::class);
+    }
 
     protected $table = 'parameters';
 
@@ -23,4 +32,6 @@ class Parameter extends Model
 
         'created_at', 'updated_at'
     ];
+
+
 }

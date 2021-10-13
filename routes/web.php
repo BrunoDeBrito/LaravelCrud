@@ -34,10 +34,9 @@ Route::put('/produtos',                 'ProductController@update');
 Route::delete('/produtos',              'ProductController@delete');
 
 //Rota de Paramentros
-Route::get('/parametros',                 'ParamenterController@index');
-
-Route::get('/parametros/criar',           'ParamenterController@create');
-Route::post('/parametros',                'ParamenterController@insert');
-Route::get('/parametros/{id}/editar',     'ParamenterController@edit');
-Route::put('/parametros',                 'ParamenterController@update');
-Route::delete('/parametros',               'ParamenterController@delete');
+Route::get('/parametros',                 'ParameterController@index');
+Route::get('/parametros/criar',           'ParameterController@create');
+Route::post('/parametros',                'ParameterController@insert');
+Route::get('/parametros/{id}/editar',     'ParameterController@edit');
+Route::put('/parametros',                 'ParameterController@update');
+Route::delete('/parametros',              'ParameterController@delete');

@@ -8,24 +8,26 @@ use App\Models\ParameterOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ParamenterController extends Controller
+class ParameterController extends Controller
 {
     /**
-     * Tela de 
+     * Tela de parametro
      *
      * @return \Illuminate\Http\Response´
      */
     public function index(Request $request) {
 
-        $parameters = Parameter::all();
+        $parameters = Parameter::orderBy('name', 'asc')
+		->get();
 
         return view('parameters.index', [ 'parameters' => $parameters ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Apresentação o formulario de criação
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
     public function create(Request $request) {
 
@@ -33,10 +35,10 @@ class ParamenterController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Criação dos Pametros
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
     public function insert(Request $request) {
 
@@ -57,32 +59,32 @@ class ParamenterController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Apresenta fomulario de atualização 
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param [type] $id
+     * @return void
      */
     public function edit(Request $request, $id) {
 
         $parameter = Parameter::find($id);
 
         if ($parameter) {
-
+            
             return $this->form($request, $parameter);
 
         } else {
 
             return redirect('parametros')->withErrors('Parâmetro invalido');
-
         }
         
     }
 
     /**
-     * Update the specified resource in storage.
+     * Altera os dados do Parametro
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
     public function update(Request $request) {
 
@@ -101,7 +103,6 @@ class ParamenterController extends Controller
             } else {
 
                 return back()->withErrors('Alteração inválida');
-
             }
 
         } else {
@@ -112,7 +113,8 @@ class ParamenterController extends Controller
 
     private function form($request, $parameter) {
 
-        return view('parameters.create-edit', [ 'parameter' => $parameter ]);
+        $parametersOptions = $parameter->paramenterOption;
+        return view('parameters.create-edit', [ 'parameter' => $parameter, 'parametersOptions' => $parametersOptions ]);
     }
 
     /**
@@ -123,11 +125,19 @@ class ParamenterController extends Controller
      * @return void
      */
     private function save($request, $parameter) {
-
-        $parameterOption = ParameterOption::all();
-
-        $parameter->name = $request->name;
+        
+        $parameter->name         = $request->name;
         $parameter->save();
+        
+        foreach($request->option as $item) {
+
+            $parameterOption = new ParameterOption();
+            $parameterOption->parameter_id = $parameter->id;
+            $parameterOption->name = $parameter->name;
+            $parameterOption->save();
+        }
+        
+        $parameterOption->name = $item;
     }
 
     /**
@@ -146,11 +156,10 @@ class ParamenterController extends Controller
         ]);
 
         return $validator;
-        
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove um Parametro
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -167,7 +176,6 @@ class ParamenterController extends Controller
         } else {
             
             return back()->withErrors('Parâmetro Invalido');
-
         }
     }
 }

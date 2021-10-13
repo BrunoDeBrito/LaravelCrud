@@ -36,11 +36,14 @@
                 <table class="option-list">
                     <thead>
                         <tr>
-                            <th>Parâmetro</th>
+                            <th>Tipo do Parâmetro</th>
                             <th></th>
                         </tr>
                     </thead>
+
                     <tbody>
+                        @if(isset($parametersOptions) && count($parametersOptions) === 0)
+
                         <tr>
                             <td>
                                 <input type="text" name="option[]" class="form-control" placeholder="Parâmetro...">
@@ -49,7 +52,20 @@
                                 <a class="btn btn-danger btn-sm btn-remove-option"><i class="material-icons">delete</i></a>
                             </td>
                         </tr>
+                        
+                        @endif
+                        @foreach ($parametersOptions as $parameterOption)
+                        <tr>
+                            <td>
+                                <input type="text" name="option[]" value="{{ $parameterOption->name }}" class="form-control" placeholder="Parâmetro...">
+                            </td>
+                            <td>
+                                <a class="btn btn-danger btn-sm btn-remove-option"><i class="material-icons">delete</i></a>
+                            </td>
+                        </tr>
+                        @endforeach
                     </tbody>
+
                 </table>
             </div>
             

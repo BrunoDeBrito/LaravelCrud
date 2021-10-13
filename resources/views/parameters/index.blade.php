@@ -22,7 +22,6 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nome</th>
-                <th scope="col">Detalhes</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
@@ -34,10 +33,11 @@
             <tr>                    
                 <td>{{ $parameter->id }}</td>
                 <td>{{ $parameter->name }}</td>
-                <td>P | M | G</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="{{ url('parametros/'.$parameter->id.'/editar') }}" ><i class="material-icons">edit</i></a>
-                    <button type="button" class="btn btn-danger btn-sm btn-remove" data-id="{{ $parameter->id }}"><i class="material-icons">delete</i></button>
+                    <a class="btn btn-primary btn-sm" href="{{ url('parametros/'.$parameter->id.'/editar') }}" >
+                        <i class="material-icons">edit</i></a>
+                    <button type="button" class="btn btn-danger btn-sm btn-remove" data-id="{{ $parameter->id }}">
+                        <i class="material-icons">delete</i></button>
                 </td>                
             </tr>
 
@@ -47,7 +47,7 @@
 
     </table>
 
-</div>
+</div> 
 
 <div class="main-controls text-right mt-2">
     <a class="btn btn-primary" href="{{ url('parametros/criar') }}">Novo Parametro</a>
