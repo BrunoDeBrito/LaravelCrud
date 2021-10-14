@@ -18,7 +18,6 @@ class ParameterOption extends Model
     use HasFactory;
 
     public function parameter() {
-
         return $this->belongsTo(Parameter::class);
     }
 
@@ -30,11 +29,5 @@ class ParameterOption extends Model
         'created_at', 'updated_at'
     
     ];
-
-    public function scopSearch($query, $request) {
-
-        $query->from();
-
-    }
 
 }

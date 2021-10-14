@@ -21,15 +21,14 @@ class Parameter extends Model
      *
      * @return void
      */
-    public function paramenterOption() {
-
-        return $this->hasMany(ParameterOption::class);
+    public function options() {
+        return $this->hasMany(ParameterOption::class)
+        ->orderBy('id', 'asc');
     }
 
     protected $table = 'parameters';
 
     public $date = [
-
         'created_at', 'updated_at'
     ];
 

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Parameter;
 use App\Models\ParameterOption;
-
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ParameterController extends Controller
@@ -42,18 +43,24 @@ class ParameterController extends Controller
      */
     public function insert(Request $request) {
 
-        $validator = $this->validator($request);
+        try {
 
-        if (!$validator->fails()) {
+            $validator = $this->validator($request);
 
-            $parameter = new Parameter();
-            $this->save($request, $parameter);
+            if (!$validator->fails()) {
 
-            return redirect('parametros')->withSuccess('Parâmetro Criado com sucesso');
+                $parameter = new Parameter();
+                $this->save($request, $parameter);
 
-        } else {
+                return redirect('parametros')->withSuccess('Parâmetro Criado com sucesso');
 
-           return back()->withErrors($validator->errors()->first());
+            } else {
+
+                return back()->withInput()->withErrors($validator->errors()->first());
+            }
+
+        } catch (Exception $e) {
+            return back()->withInput()->withErrors('Não foi possível inserir o parâmetro: '.$e->getMessage().'.');
         }
 
     }
@@ -88,33 +95,42 @@ class ParameterController extends Controller
      */
     public function update(Request $request) {
 
-        $valitador = $this->validator($request);
+        try {
 
-        if (!$valitador->fails()) {
+            $valitador = $this->validator($request);
 
-            $parameter = Parameter::find($request->id);
+            if (!$valitador->fails()) {
 
-            if ($parameter) {
+                $parameter = Parameter::find($request->id);
 
-                $this->save($request, $parameter);
+                if ($parameter) {
 
-                return redirect('parametros')->withSuccess('Parâmetro Alterado com Sucesso');
+                    $this->save($request, $parameter);
+
+                    return redirect('parametros')->withSuccess('Parâmetro Alterado com Sucesso');
+
+                } else {
+
+                    return back()->withInput()->withErrors('Alteração inválida');
+                }
 
             } else {
-
-                return back()->withErrors('Alteração inválida');
+                return back()->withInput()->withErrors($valitador->errors()->first());
             }
 
-        } else {
-
-            return back()->withErrors($valitador->erros()->first());
+        } catch (Exception $e) {
+            return back()->withInput()->withErrors('Não foi possível alterar o parâmetro: '.$e->getMessage().'.');
         }
     }
 
+    /**
+     * Carrega o formulário para edição de um parâmetro
+     *
+     * @param [type] $parameter
+     * @return void
+     */
     private function form($request, $parameter) {
-
-        $parametersOptions = $parameter->paramenterOption;
-        return view('parameters.create-edit', [ 'parameter' => $parameter, 'parametersOptions' => $parametersOptions ]);
+        return view('parameters.create-edit', [ 'parameter' => $parameter ]);
     }
 
     /**
@@ -126,18 +142,59 @@ class ParameterController extends Controller
      */
     private function save($request, $parameter) {
         
-        $parameter->name         = $request->name;
-        $parameter->save();
-        
-        foreach($request->option as $item) {
+        try {
 
-            $parameterOption = new ParameterOption();
-            $parameterOption->parameter_id = $parameter->id;
-            $parameterOption->name = $parameter->name;
-            $parameterOption->save();
+            DB::beginTransaction();
+
+            $parameter->name         = $request->name;
+            $parameter->save();
+
+            $optionIds = [];
+
+            foreach($request->option_name as $k => $optionName) {
+
+                $optionId = $request->option_id[$k] ?? null;
+
+                if ($optionId) {
+
+                    $option = ParameterOption::find($optionId);
+
+                } else {
+
+                    $option = new ParameterOption();
+                    $option->parameter_id = $parameter->id;
+                    $option->created_at = now();
+
+                }
+
+                if (!$option->id || $option->name != $optionName) {
+
+                    $option->name = $optionName;
+                    $option->updated_at = now();
+                    $option->save();
+
+                }
+
+                array_push($optionIds, $option->id);
+
+            }
+
+            if (count($optionIds) > 0) {
+
+                //Exclui opções
+                ParameterOption::where('parameter_id', $parameter->id)->whereNotIn('id', $optionIds)->delete();
+
+            }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+
+            DB::rollback();
+            throw $e;
+
         }
         
-        $parameterOption->name = $item;
     }
 
     /**
@@ -152,7 +209,10 @@ class ParameterController extends Controller
 
             'id'    => 'nullable|nullable|required_if:_method,PUT',
             'name'  => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
-
+            'option_name' => 'required|array|min:1',
+            'option_name.*' => 'required|string|max:30'
+        ], [
+            'option_name' => 'É preciso cadastrar pelo menos uma opção para o parâmetro',
         ]);
 
         return $validator;
@@ -170,7 +230,9 @@ class ParameterController extends Controller
 
         if ($parameter) {
 
+            //Remove o parâmetro
             $parameter->delete();
+
             return redirect('parametros')->withSuccess('Parâmetro Removido com sucesso');
 
         } else {

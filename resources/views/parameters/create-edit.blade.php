@@ -20,7 +20,7 @@
 
                 <div class="mb-5 col-4">
                     <label class="form-label">Nome do Parametro</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Tamanho" value="{{ $parameter->name }}">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Tamanho" value="{{ old('name', $parameter->name) }}">
                 </div>
 
             </div>
@@ -42,28 +42,55 @@
                     </thead>
 
                     <tbody>
-                        @if(isset($parametersOptions) && count($parametersOptions) === 0)
+
+                        @php    
+
+                            $options = [];
+
+                            if (old('option_name')) {
+
+                                $optionIds = old('option_id');
+
+                                foreach(old('option_name') as $k => $on) {
+
+                                    array_push($options, (object) [
+                                        "id" => $optionIds[$k] ?? null,
+                                        "name" => $on
+                                    ]);
+
+                                }
+
+                            } else if ($parameter->options) {
+                                $options = $parameter->options;
+                            }
+
+                        @endphp
+
+                        @if(count($options) == 0)
 
                         <tr>
                             <td>
-                                <input type="text" name="option[]" class="form-control" placeholder="Parâmetro...">
+                                <input type="hidden" name="option_id[]"/>
+                                <input type="text" name="option_name[]" class="form-control" placeholder="Parâmetro..."/>
                             </td>
                             <td>
                                 <a class="btn btn-danger btn-sm btn-remove-option"><i class="material-icons">delete</i></a>
                             </td>
                         </tr>
                         
+                        @else
+                            @foreach ($options as $option)
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="option_id[]" value="{{ $option->id }}"/>
+                                    <input type="text" name="option_name[]" value="{{ $option->name }}" class="form-control" placeholder="Parâmetro...">
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger btn-sm btn-remove-option"><i class="material-icons">delete</i></a>
+                                </td>
+                            </tr>
+                            @endforeach
                         @endif
-                        @foreach ($parametersOptions as $parameterOption)
-                        <tr>
-                            <td>
-                                <input type="text" name="option[]" value="{{ $parameterOption->name }}" class="form-control" placeholder="Parâmetro...">
-                            </td>
-                            <td>
-                                <a class="btn btn-danger btn-sm btn-remove-option"><i class="material-icons">delete</i></a>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
 
                 </table>

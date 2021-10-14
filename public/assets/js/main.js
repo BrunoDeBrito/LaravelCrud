@@ -10,7 +10,8 @@ $(function() {
 
         if (id) {
 
-            var htmlForm = `<form method="POST">
+            var htmlForm = 
+            `<form method="POST">
                 <input type="hidden" name="id" value="${id}"/>
                 <input type="hidden" name="_token" value="${csrfToken}"/>
                 <input type="hidden" name="_method" value="DELETE"/>
