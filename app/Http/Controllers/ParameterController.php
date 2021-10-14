@@ -81,7 +81,6 @@ class ParameterController extends Controller
             return $this->form($request, $parameter);
 
         } else {
-
             return redirect('parametros')->withErrors('Parâmetro invalido');
         }
         
@@ -110,7 +109,6 @@ class ParameterController extends Controller
                     return redirect('parametros')->withSuccess('Parâmetro Alterado com Sucesso');
 
                 } else {
-
                     return back()->withInput()->withErrors('Alteração inválida');
                 }
 
@@ -164,17 +162,19 @@ class ParameterController extends Controller
                     $option = new ParameterOption();
                     $option->parameter_id = $parameter->id;
                     $option->created_at = now();
-
+                    $option->name = $request->name;
+                    $option->save();
+                    
                 }
-
-                if (!$option->id || $option->name != $optionName) {
-
+                
+                if (!$optionId || $option->name != $optionName) {
+                    
                     $option->name = $optionName;
                     $option->updated_at = now();
                     $option->save();
-
+                    
                 }
-
+                
                 array_push($optionIds, $option->id);
 
             }
@@ -236,7 +236,6 @@ class ParameterController extends Controller
             return redirect('parametros')->withSuccess('Parâmetro Removido com sucesso');
 
         } else {
-            
             return back()->withErrors('Parâmetro Invalido');
         }
     }
