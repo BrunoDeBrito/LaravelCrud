@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 /**
- * Controller de Categorias
+ *ANCHOR Controller de Categorias
  *
  * @author Bruno de Brito <bruno@sysout.com.br>
  * @since 06/10/2021
@@ -18,7 +18,7 @@ class CategoryController extends Controller
 {
 
 	/**
-	 ** Apresenta a listagem de categorias
+	 *ANCHOR Apresenta a listagem de categorias
 	 *
 	 * @return void
 	 */
@@ -32,7 +32,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 ** Apresenta o formulario de criação
+	 *ANCHOR Apresenta o formulario de criação
 	 *
 	 * @param Category $categories
 	 * @return void
@@ -44,14 +44,14 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Criação das Categorias
+	 *ANCHOR Criação das Categorias
 	 *
 	 * @param Request $request
 	 * @return response
 	 */
 	public function insert(Request $request) {
 
-		//Realiza a validação dos dados enviados pelo formulário
+		//NOTE Realiza a validação dos dados enviados pelo formulário
 		$validator = $this->validator($request);
 
 		if (!$validator->fails()) {
@@ -71,7 +71,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 ** Apresenta formulario de atualização das Categorias
+	 *ANCHOR Apresenta formulario de atualização das Categorias
 	 *
 	 * @param Category $categories
 	 * @param interger $id
@@ -93,7 +93,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 ** Altera os dados de uma categoria
+	 *ANCHOR Altera os dados de uma categoria
 	 *
 	 * @param Request $request
 	 * @param Category $categories
@@ -129,7 +129,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Carrega as informações para apresentação do formulário
+	 *ANCHOR Carrega as informações para apresentação do formulário
 	 *
 	 * @return void
 	 */
@@ -140,7 +140,7 @@ class CategoryController extends Controller
 
 
 	/**
-	 * Grava os dados da categoria
+	 *ANCHOR Grava os dados da categoria
 	 *
 	 * @return void
 	 */
@@ -152,7 +152,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Valida as informações da categoria
+	 *ANCHOR Valida as informações da categoria
 	 *
 	 * @param [type] $request
 	 * @return object
@@ -170,7 +170,7 @@ class CategoryController extends Controller
 	}
 
 	/**
-	 * Remove uma categoria
+	 *ANCHOR Remove uma categoria
 	 *
 	 * @param Request $request
 	 * @return void
