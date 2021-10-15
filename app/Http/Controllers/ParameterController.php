@@ -139,12 +139,12 @@ class ParameterController extends Controller
      * @return void
      */
     private function save($request, $parameter) {
-        
+
         try {
 
             DB::beginTransaction();
 
-            $parameter->name         = $request->name;
+            $parameter->name = $request->name;
             $parameter->save();
 
             $optionIds = [];
@@ -154,26 +154,18 @@ class ParameterController extends Controller
                 $optionId = $request->option_id[$k] ?? null;
 
                 if ($optionId) {
-
+                    
                     $option = ParameterOption::find($optionId);
-
+               
                 } else {
 
                     $option = new ParameterOption();
                     $option->parameter_id = $parameter->id;
-                    $option->created_at = now();
-                    $option->name = $request->name;
-                    $option->save();
-                    
+
                 }
                 
-                if (!$optionId || $option->name != $optionName) {
-                    
-                    $option->name = $optionName;
-                    $option->updated_at = now();
-                    $option->save();
-                    
-                }
+                $option->name = $optionName;
+                $option->save();
                 
                 array_push($optionIds, $option->id);
 
