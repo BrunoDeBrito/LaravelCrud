@@ -149,21 +149,20 @@ class ParameterController extends Controller
 
             $optionIds = [];
 
+            // Cria e atualiza cada opções do parametro
             foreach($request->option_name as $k => $optionName) {
 
                 $optionId = $request->option_id[$k] ?? null;
 
                 if ($optionId) {
-                    
+
                     $option = ParameterOption::find($optionId);
                
                 } else {
-
                     $option = new ParameterOption();
                     $option->parameter_id = $parameter->id;
 
                 }
-                
                 $option->name = $optionName;
                 $option->save();
                 

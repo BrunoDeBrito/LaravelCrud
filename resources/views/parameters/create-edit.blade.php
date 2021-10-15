@@ -50,15 +50,18 @@
                             if (old('option_name')) {
 
                                 $optionIds = old('option_id');
-
+                                
+                                //faz um loop pra pegar palavras antigas e/ou novas e salvar 
                                 foreach(old('option_name') as $k => $on) {
 
                                     array_push($options, (object) [
+
                                         "id" => $optionIds[$k] ?? null,
                                         "name" => $on
+
                                     ]);
 
-                                }
+                                }\
 
                             } else if ($parameter->options) {
                                 $options = $parameter->options;
