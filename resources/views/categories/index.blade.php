@@ -29,8 +29,8 @@
                     <tr>
                         <td> {{ $category->id }} </td>
                         <td> {{ $category->name }} </td>
-                        <td> {{ $category->created_at->format('d/m/Y H:i:s') }} </td>
-                        <td> {{ $category->updated_at->format('d/m/Y H:i:s') }} </td>
+                        <td> {{ $category->created_at->format('d/m/Y H:i') }} </td>
+                        <td> {{ $category->updated_at->format('d/m/Y H:i') }} </td>
                         <td>
                             <a class="btn btn-success" href="{{ url('categorias/'.$category->id.'/editar') }}"><i class="material-icons">edit</i></a>
                             <button type="button" class="btn btn-danger btn-remove" data-id="{{ $category->id }}"><i class="material-icons">delete</i></button>

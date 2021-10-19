@@ -18,8 +18,8 @@ class CreateProductParametersTable extends Migration
             $table->id();
 
             //Tabela Pivo
-            $table->unsignedBigInteger('products_id');
-            $table->unsignedBigInteger('parameter_id');
+            $table->foreignId('products_id');
+            $table->foreignId('parameter_id');
 
             $table->foreign('parameter_id')->references('id')->on('parameters');
             $table->foreign('products_id')->references('id')->on('products');
@@ -31,8 +31,8 @@ class CreateProductParametersTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
+        
         Schema::dropIfExists('product_paramenters');
     }
 }

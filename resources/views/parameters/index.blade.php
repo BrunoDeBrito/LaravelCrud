@@ -9,11 +9,6 @@
 
     @include('partials._alert')
 
-    <form class="form-filters mb-4">
-        <input type="text" name="search" class="form-control" value="{{ Request::get('search') }}"
-            placeholder="Pesquise por algo..." />
-    </form>
-
     <div class="table-responsive">
 
         <h3 class="center">Lista de Paramentros</h3>

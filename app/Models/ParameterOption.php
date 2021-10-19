@@ -15,19 +15,32 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ParameterOption extends Model
 {
-    use HasFactory;
-
-    public function parameter() {
-        return $this->belongsTo(Parameter::class);
-    }
-
-
+    
     protected $table = 'parameters_options';
     
-    public $dates = [
+    use HasFactory;
 
-        'created_at', 'updated_at'
+    /**
+     * obtem os parametros
+     *
+     * @return void
+     */
+    public function parameter() {
+
+        return $this->belongsTo(Parameter::class)
+        ->orderBy('id', 'asc');
+    }
+
+    /**
+     * Obtem os produtos
+     *
+     * @return void
+     */
+    public function products() {
+        
+        return $this->belongsToMany(Products::class)
+        ->orderBy('id', 'asc');
+    }
+
     
-    ];
-
 }

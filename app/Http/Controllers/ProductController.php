@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ParameterOption;
+use App\Models\Parameter;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -63,9 +65,7 @@ class ProductController extends Controller
 			return redirect('produtos')->withSuccess('Produto cadastrado com sucesso!');
 
 		} else {
-
 			return back()->withErrors($validator->errors()->first());
-
 		}
 
 	}
@@ -83,7 +83,6 @@ class ProductController extends Controller
 			return $this->form($request, $product);
 
 		} else {
-
 			return redirect('produtos')->withErrors('Produto inválido!');
 		}
 
@@ -112,15 +111,11 @@ class ProductController extends Controller
 				return redirect('produtos')->withSuccess('Produto alterado com sucesso!');
 
 			} else {
-
 				return back()->withErrors('Produto inválido!');
-				
 			}
 
 		} else {
-
 			return back()->withErrors($validator->errors()->first());
-
 		}
 
 	}
@@ -132,10 +127,23 @@ class ProductController extends Controller
 	 */
 	private function form($request, $product) {
 
-		//Obtem a lista de categorias
+		// Obtem a lista de categorias
 		$categories = Category::orderBy('name', 'asc')->get();
 
-		return view('products.create-edit', [ 'product' => $product, 'categories' => $categories ]);
+		// Obtem os parametros
+		$paramenters = Parameter::orderBy('id', 'asc')->get();
+		
+		// Obtem os parametros Opcionais
+		$paramentersOptions = ParameterOption::orderBy('id', 'asc')->get();
+
+		return view('products.create-edit', [
+
+			'product' 			 => $product,
+			'categories' 		 => $categories,
+			'paramenters' 		 => $paramenters,
+			'paramentersOptions' => $paramentersOptions
+
+		]);
 	}
 
 	/**
@@ -145,10 +153,11 @@ class ProductController extends Controller
 	 */
 	private function save($request, $product) {
 
-		$product->name = $request->name;
-		$product->price = $request->price;
-		$product->descriptions = $request->descriptions;
-		$product->category_id = $request->category_id;
+		$product->name         	  = $request->name;
+		$product->descriptions 	  = $request->descriptions;
+		$product->category_id  	  = $request->category_id;
+
+		// dd($request->all());
 		
 		$product->save();
 	}
@@ -165,7 +174,7 @@ class ProductController extends Controller
 
 			'id' 	      => 'nullable|nullable|required_if:_method,PUT',
 			'name' 	      => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
-			'price' 	  => 'numeric|required',
+			// 'price' 	  => 'numeric|required',
 			'description' => 'nullable|max:1000',
 			'category_id' => 'required|numeric|exists:categories,id',
 

@@ -22,8 +22,21 @@ class Parameter extends Model
      * @return void
      */
     public function options() {
+
         return $this->hasMany(ParameterOption::class)
         ->orderBy('id', 'asc');
+        
+    }
+
+    /**
+     * obtem os produtos
+     *
+     * @return void
+     */
+    public function products() {
+        
+        return $this->belongsToMany(Product::class)
+		->orderBy('id', 'asc');
     }
 
     protected $table = 'parameters';
