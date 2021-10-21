@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class Parameter extends Model
 {
     use HasFactory;
+    
     /**
      * Obetem as opções do parametro
      *
@@ -24,8 +25,7 @@ class Parameter extends Model
     public function options() {
 
         return $this->hasMany(ParameterOption::class)
-        ->orderBy('id', 'asc');
-        
+        ->orderBy('id', 'asc');        
     }
 
     /**
@@ -40,10 +40,5 @@ class Parameter extends Model
     }
 
     protected $table = 'parameters';
-
-    public $date = [
-        'created_at', 'updated_at'
-    ];
-
 
 }

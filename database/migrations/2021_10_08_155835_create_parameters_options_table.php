@@ -11,17 +11,16 @@ class CreateParametersOptionsTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
+
         Schema::create('parameters_options', function (Blueprint $table) {
 
             $table->id();
             $table->foreignId('parameter_id');
             $table->string('name', 100);
+            $table->timestamps();
 
             $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('cascade');
-            
-            $table->timestamps();
 
         });
     }

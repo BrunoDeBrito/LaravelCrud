@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\ParameterOption;
-use App\Models\Parameter;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Parameter;
+use App\Models\ProductConfig;
+use App\Models\ParameterOption;
+use App\Models\ProductConfigOption;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 /**
  * Controller de Produtos
  *
@@ -27,7 +30,7 @@ class ProductController extends Controller
 	public function index(Request $request) {
 
 		$products = Product::search($request)
-		->orderBy('name', 'asc')
+		->orderBy('id', 'asc')
 		->get();
 		
 		return view('products.index', [ 'products' => $products ]);
@@ -54,18 +57,27 @@ class ProductController extends Controller
 	 */
 	public function insert(Request $request) {
 
-		//Realiza a validação dos dados enviados pelo formulário
-		$validator = $this->validator($request);
-
-		if (!$validator->fails()) {
-
-			$product = new Product();
-			$this->save($request, $product);
+		try {
+			
+			//Realiza a validação dos dados enviados pelo formulário
+			$validator = $this->validator($request);
 	
-			return redirect('produtos')->withSuccess('Produto cadastrado com sucesso!');
+			// return back()->withSuccess('testando')->withInput();
+	
+			if (!$validator->fails()) {
+	
+				$product = new Product();
+				$this->save($request, $product);
+		
+				return redirect('produtos')->withSuccess('Produto cadastrado com sucesso!');
+	
+			} else {
+				return back()->withErrors($validator->errors()->first());
+			}
 
-		} else {
-			return back()->withErrors($validator->errors()->first());
+		} catch (Exception $e) {
+
+            return back()->withInput()->withErrors('Não foi possível inserir o Produto: '.$e->getMessage().'.');
 		}
 
 	}
@@ -98,25 +110,33 @@ class ProductController extends Controller
 	 */
 	public function update(Request $request) {
 
-		$validator = $this->validator($request);
+		try {
 
-		if (!$validator->fails()) {
-
-			$product = Product::find($request->id);
-
-			if ($product) {
-
-				$this->save($request, $product);
-
-				return redirect('produtos')->withSuccess('Produto alterado com sucesso!');
-
+			$validator = $this->validator($request);
+	
+			if (!$validator->fails()) {
+	
+				$product = Product::find($request->id);
+	
+				if ($product) {
+	
+					$this->save($request, $product);
+	
+					return redirect('produtos')->withSuccess('Produto alterado com sucesso!');
+	
+				} else {
+					return back()->withErrors('Produto inválido!');
+				}
+	
 			} else {
-				return back()->withErrors('Produto inválido!');
+				return back()->withErrors($validator->errors()->first());
 			}
 
-		} else {
-			return back()->withErrors($validator->errors()->first());
+		} catch (Exception $e) {
+
+			return back()->withInput()->withErrors('Não foi possível alterar o produto: '.$e->getMessage().'.');
 		}
+
 
 	}
 
@@ -128,7 +148,7 @@ class ProductController extends Controller
 	private function form($request, $product) {
 
 		// Obtem a lista de categorias
-		$categories = Category::orderBy('name', 'asc')->get();
+		$categories = Category::orderBy('id', 'asc')->get();
 
 		// Obtem os parametros
 		$paramenters = Parameter::orderBy('id', 'asc')->get();
@@ -147,19 +167,66 @@ class ProductController extends Controller
 	}
 
 	/**
-	 * Grava os dados da produto
+	 *ANCHOR Grava os dados da produto
 	 *
 	 * @return void
 	 */
 	private function save($request, $product) {
 
-		$product->name         	  = $request->name;
-		$product->descriptions 	  = $request->descriptions;
-		$product->category_id  	  = $request->category_id;
+		try {
 
-		// dd($request->all());
+			DB::beginTransaction();
+			
+			//Cria e Atualiza os Produtos
+			$product->name         	  = $request->name;
+			$product->descriptions 	  = $request->descriptions;
+			$product->category_id  	  = $request->category_id;
+			$product->save();
+			
+			// Cria e Atualiza as configurações dos produtos
+			$parameterOptionsIds = [];
+			
+			foreach ($request->price as $k => $priceProduct) {
+				
+				// $parameterOptionsIds = $request
+				
+				if ($request->price) {
+					
+					//Buca os preços para fazer alteração
+					$configProd = ProductConfig::where('products', $product->id, 'price', $request->price);
+
+				} else {}
+				
+				//Salva os preço com a ref do produto
+				$configProd = new ProductConfig();
+				
+				$configProd->product_id = $product->id;
+				$configProd->price = $request->price[$k];
+				$configProd->save();
+				// 
+				//Pega os Options e compara cons os Id's  0 : 1 / 1:3 -> exemplo
+				$parameterOptionsIds = $request->input("parameters_options_".$k) ?? null;
+				
+				//NOTE salva todos os parametro optin relacionados a config do produto
+				foreach ($parameterOptionsIds as $po) {
+					
+					//criar model product_config_options
+					$productConfigOption = new ProductConfigOption();
 		
-		$product->save();
+					$productConfigOption->product_config_id   = $configProd->id;
+					$productConfigOption->parameter_option_id = $po;
+					$productConfigOption->save();
+
+				}
+			}
+// 
+			DB::commit();
+
+		} catch (Exception $e) {
+
+			DB::rollback();
+            throw $e;
+		}
 	}
 
 	/**
@@ -174,7 +241,7 @@ class ProductController extends Controller
 
 			'id' 	      => 'nullable|nullable|required_if:_method,PUT',
 			'name' 	      => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
-			// 'price' 	  => 'numeric|required',
+			// 'price[]' 	  => 'numeric|required',
 			'description' => 'nullable|max:1000',
 			'category_id' => 'required|numeric|exists:categories,id',
 
@@ -191,16 +258,24 @@ class ProductController extends Controller
 	 */
 	public function delete(Request $request) {
 
-		$product = Product::find($request->id);
+		try {
 
-		if ($product) {
+			$product = Product::find($request->id);
+	
+			if ($product) {
+	
+				$product->delete();
+				return redirect('produtos')->withSuccess('Produto removido com sucesso!');
+	
+			}
+	
+			return back()->withErrors('Produto inválido!');
 
-			$product->delete();
-			return redirect('produtos')->withSuccess('Produto removido com sucesso!');
+		} catch (Exception $e) {
 
+            return back()->withInput()->withErrors('Não foi possível remover o Produto: '.$e->getMessage().'.');
 		}
 
-		return back()->withErrors('Produto inválido!');				
 	}
 
 }

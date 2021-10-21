@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Parameter;
 use App\Models\ParameterOption;
-use Exception;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -12,20 +13,20 @@ use Illuminate\Support\Facades\Validator;
 class ParameterController extends Controller
 {
     /**
-     * Tela de parametro
+     *ANCHOR Tela de parametro
      *
      * @return \Illuminate\Http\Response´
      */
     public function index(Request $request) {
 
-        $parameters = Parameter::orderBy('name', 'asc')
+        $parameters = Parameter::orderBy('id', 'asc')
 		->get();
 
         return view('parameters.index', [ 'parameters' => $parameters ]);
     }
 
     /**
-     * Apresentação o formulario de criação
+     *ANCHOR Apresentação o formulario de criação
      *
      * @param Request $request
      * @return void
@@ -36,7 +37,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Criação dos Pametros
+     *ANCHOR Criação dos Pametros
      *
      * @param Request $request
      * @return void
@@ -44,7 +45,8 @@ class ParameterController extends Controller
     public function insert(Request $request) {
 
         try {
-
+            
+		    //NOTE Realiza a validação dos dados enviados pelo formulário
             $validator = $this->validator($request);
 
             if (!$validator->fails()) {
@@ -66,7 +68,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Apresenta fomulario de atualização 
+     *ANCHOR Apresenta fomulario de atualização 
      *
      * @param Request $request
      * @param [type] $id
@@ -87,7 +89,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Altera os dados do Parametro
+     *ANCHOR Altera os dados do Parametro
      *
      * @param Request $request
      * @return void
@@ -122,7 +124,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Carrega o formulário para edição de um parâmetro
+     *ANCHOR Carrega o formulário para edição de um parâmetro
      *
      * @param [type] $parameter
      * @return void
@@ -132,7 +134,7 @@ class ParameterController extends Controller
     }
 
     /**
-     * Grava os dados do Parametro
+     *ANCHOR Grava os dados do Parametro
      *
      * @param [type] $request
      * @param [type] $parameter
@@ -142,15 +144,17 @@ class ParameterController extends Controller
 
         try {
 
+            //inicia o banco
             DB::beginTransaction();
 
             $parameter->name = $request->name;
             $parameter->save();
-
+            
+            //NOTE Cria e atualiza cada opções do parametro
             $optionIds = [];
-
-            // Cria e atualiza cada opções do parametro
-            foreach($request->option_name as $k => $optionName) {
+            
+            //NOTE pega os options e compra com os Id's exp -> 0:3 / 1:6
+            foreach ($request->option_name as $k => $optionName) {
 
                 $optionId = $request->option_id[$k] ?? null;
 
@@ -159,10 +163,11 @@ class ParameterController extends Controller
                     $option = ParameterOption::find($optionId);
                
                 } else {
+                    
                     $option = new ParameterOption();
                     $option->parameter_id = $parameter->id;
-
                 }
+
                 $option->name = $optionName;
                 $option->save();
                 
@@ -183,13 +188,11 @@ class ParameterController extends Controller
 
             DB::rollback();
             throw $e;
-
-        }
-        
+        }    
     }
 
     /**
-     * Validação das informações
+     *ANCHOR Validação das informações
      *
      * @param  $request
      * @return object
@@ -202,6 +205,7 @@ class ParameterController extends Controller
             'name'  => 'required|string|max:100|unique:products,name'.($request->id?(','.$request->id):''),
             'option_name' => 'required|array|min:1',
             'option_name.*' => 'required|string|max:30'
+            
         ], [
             'option_name' => 'É preciso cadastrar pelo menos uma opção para o parâmetro',
         ]);
@@ -210,24 +214,31 @@ class ParameterController extends Controller
     }
 
     /**
-     * Remove um Parametro
+     *ANCHOR Remove um Parametro
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request) {
 
-        $parameter = Parameter::find($request->id);
-
-        if ($parameter) {
-
-            //Remove o parâmetro
-            $parameter->delete();
-
-            return redirect('parametros')->withSuccess('Parâmetro Removido com sucesso');
-
-        } else {
-            return back()->withErrors('Parâmetro Invalido');
+        try {
+            
+            $parameter = Parameter::find($request->id);
+    
+            if ($parameter) {
+    
+                //Remove o parâmetro
+                $parameter->delete();
+    
+                return redirect('parametros')->withSuccess('Parâmetro Removido com sucesso');
+    
+            } else {
+                return back()->withErrors('Parâmetro Invalido');
+            }
+            
+        } catch (Exception $e) {
+            return back()->withInput()->withErrors('Não foi possível remover o parâmetro: '.$e->getMessage().'.');
         }
+
     }
 }

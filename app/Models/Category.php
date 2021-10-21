@@ -15,9 +15,6 @@ class Category extends Model
 {
 
 	protected $table = 'categories';
-	public $dates = [
-		'created_at', 'updated_at'
-	];
 
 	/**
 	 * Relação com tabela de produtores

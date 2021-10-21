@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Schema;
 class CreateProductsTable extends Migration
 {
 
+  /**
+   * Undocumented function
+   *
+   * @return void
+   */
   public function up()
   {
 

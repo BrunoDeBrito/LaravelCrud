@@ -36,7 +36,6 @@
 
             </div>
 
-
             <div class="table-responsive">
                 <table class="option-list">
                     <thead>
@@ -80,8 +79,8 @@
                                         placeholder="Parâmetro..." />
                                 </td>
                                 <td>
-                                    <a class="btn btn-danger btn-sm btn-remove-option"><i
-                                            class="material-icons">delete</i></a>
+                                    <a class="btn btn-danger btn-sm btn-remove-option">
+                                        <i class="material-icons">delete</i></a>
                                 </td>
                             </tr>
 
@@ -94,8 +93,8 @@
                                             class="form-control" placeholder="Parâmetro...">
                                     </td>
                                     <td>
-                                        <a class="btn btn-danger btn-sm btn-remove-option"><i
-                                                class="material-icons">delete</i></a>
+                                        <a class="btn btn-danger btn-sm btn-remove-option">
+                                            <i class="material-icons">delete</i></a>
                                     </td>
                                 </tr>
                             @endforeach

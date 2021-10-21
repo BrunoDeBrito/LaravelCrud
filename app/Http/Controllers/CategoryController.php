@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Category;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 /**
  *ANCHOR Controller de Categorias
@@ -28,7 +30,6 @@ class CategoryController extends Controller
 		->get();
 
 		return view('categories.index', [ 'categories' => $categories ]);
-
 	}
 
 	/**
@@ -51,22 +52,28 @@ class CategoryController extends Controller
 	 */
 	public function insert(Request $request) {
 
-		//NOTE Realiza a validação dos dados enviados pelo formulário
-		$validator = $this->validator($request);
+		try{
 
-		if (!$validator->fails()) {
-
-			$category = new Category();
-			$this->save($request, $category);
+			//NOTE Realiza a validação dos dados enviados pelo formulário
+			$validator = $this->validator($request);
 	
-			return redirect('categorias')
-			->withSuccess('Categoria cadastrada com sucesso!');
-
-		} else {
-
-			return back()->withErrors($validator->errors()->first());
-
+			if (!$validator->fails()) {
+	
+				$category = new Category();
+				$this->save($request, $category);
+		
+				return redirect('categorias')
+				->withSuccess('Categoria cadastrada com sucesso!');
+	
+			} else {
+	
+				return back()->withErrors($validator->errors()->first());
+	
+			}
+		} catch (Exception $e) {
+			return back()->withInput()->whithErrors('Não e possivel inserir a categeoria:'.$e->getMessage().'.');
 		}
+
 		
 	}
 
@@ -102,29 +109,36 @@ class CategoryController extends Controller
 	 */
 	public function update(Request $request) {
 
-		$validator = $this->validator($request);
+		try{
 
-		if (!$validator->fails()) {
-
-			$category = Category::find($request->id);
-
-			if ($category) {
-
-				$this->save($request, $category);
-
-				return redirect('categorias')
-				->withSuccess('Categoria alterada com sucesso!');
-
+			$validator = $this->validator($request);
+	
+			if (!$validator->fails()) {
+	
+				$category = Category::find($request->id);
+	
+				if ($category) {
+	
+					$this->save($request, $category);
+	
+					return redirect('categorias')
+					->withSuccess('Categoria alterada com sucesso!');
+	
+				} else {
+	
+					return back()->withErrors('Categoria inválida!');
+				}
+	
 			} else {
-
-				return back()->withErrors('Categoria inválida!');
+	
+				return back()->withErrors($validator->errors()->first());
+	
 			}
 
-		} else {
-
-			return back()->withErrors($validator->errors()->first());
-
+		} catch (Exception $e) {
+			return back()->withInput()->whithErrors('Não e possivel alterar a categeoria:'.$e->getMessage().'.');
 		}
+
 
 	}
 
@@ -146,8 +160,21 @@ class CategoryController extends Controller
 	 */
 	private function save($request, $category) {
 
-		$category->name = $request->name;
-		$category->save();
+		try {
+
+			DB::beginTransaction();
+
+			$category->name = $request->name;
+			$category->save();
+
+			DB::commit();
+
+		} catch (Exception $e) {
+
+			DB::rollback();
+			throw $e;
+		}
+
 
 	}
 
@@ -177,15 +204,21 @@ class CategoryController extends Controller
 	 */
 	public function delete(Request $request) {
 
-		$category = Category::find($request->id);
+		try {
+			
+			$category = Category::find($request->id);
+	
+			if ($category) {
+	
+				$category->delete();
+				return back()->withSuccess('Categoria removida com sucesso!');
+			}
+	
+			return back()->withErrors('Não foi possível remover a categoria. Dados inválidos!');
 
-		if ($category) {
+		} catch (Exception $e) {
 
-			$category->delete();
-			return back()->withSuccess('Categoria removida com sucesso!');
+            return back()->withInput()->withErrors('Não foi possível remover a categoria: '.$e->getMessage().'.');
 		}
-
-		return back()->withErrors('Não foi possível remover a categoria. Dados inválidos!');
-
 	}
 }

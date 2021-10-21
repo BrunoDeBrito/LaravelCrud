@@ -21,9 +21,8 @@
             <thead>
                 <tr>
                     <th scope="col">ID </th>
-                    <th scope="col">Categoria</th>
                     <th scope="col">Nome do Produto </th>
-                    <th scope="col">Valor </th>
+                    <th scope="col">Categoria</th>
                     <th scope="col">Descrição </th>
                     <th scope="col">Ações </th>
                 </tr>
@@ -35,9 +34,8 @@
                 
                     <tr>
                         <td> {{ $product->id }} </td>
-                        <td> {{ $product->category_name }} </td>
                         <td> {{ $product->name }} </td>
-                        <td> {{ $product->price }}R$ </td>
+                        <td> {{ $product->category_name }} </td>
                         <td> {{ $product->descriptions }} </td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ url('produtos/'.$product->id.'/editar') }}"><i class="material-icons">edit</i></a>

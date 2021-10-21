@@ -41,14 +41,17 @@ class Product extends Model
 	 *
 	 * @return void
 	 */
-	public function parametersOptions() {
+	
+	/*
+		public function parametersOptions() {
 
-		return $this->belongsToMany(ParameterOption::class)
-			->orderBy('id', 'asc');
-	}
+			return $this->belongsToMany(ParameterOption::class)
+				->orderBy('id', 'asc');
+		}
+	*/
 
 	/**
-	 * Undocumented function
+	 * Retorna as configurações do produt
 	 *
 	 * @return void
 	 */
@@ -56,6 +59,8 @@ class Product extends Model
 
 		return $this->hasMany(ProductConfig::class)
 			->orderBy('id', 'asc');
+			// ->from('parameter as p')
+			// ->join('parameters_options as po', 'po.id', 'p.name as pname');
 	}
 
 	/**
