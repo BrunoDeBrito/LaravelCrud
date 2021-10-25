@@ -23,7 +23,9 @@
                 
                 //NOTE pegar do input as informações do preço caso perca, ou q venha da atualização
                 if (old('price') && count(old('price'))) {
+
                     foreach (old('price') as $k => $price) {
+
                         array_push(
                             $productConfigs,
                             (object) [
@@ -32,6 +34,7 @@
                             ],
                         );
                     }
+
                 } elseif ($product->productConfigs && count($product->productConfigs)) {
 
                     foreach ($product->productConfigs as $k => $config) {
@@ -63,7 +66,7 @@
                 <div class="mb-3 col-5">
                     <label for="exampleFormControlTextarea1" class="form-label">Descrição do Produto</label>
                     <textarea class="form-control" placeholder="Breve descrição do produto" name="descriptions"
-                        id="descriptions" rows="3">{{ $product->descriptions }}</textarea>
+                        id="descriptions" rows="3">{{ old('descriptions', $product->descriptions) }}</textarea>
                 </div>
 
             </div>
@@ -80,7 +83,7 @@
 
                         @foreach ($categories as $category)
 
-                            <option value="{{ $category->id }}" {!! $category->id == $product->category_id ? 'selected="selected"' : '' !!}>
+                            <option value="{{ old('category_id', $category->id) }}" {!! $category->id == $product->category_id ? 'selected="selected"' : '' !!}>
                                 {{ $category->name }}
                             </option>
 
@@ -114,11 +117,11 @@
                                     $config = $productConfigs[$i] ?? false;
                                 @endphp
 
-                                {{-- REVIEW Coluna --}}
-                                <div class="config-item mb-3 col-4" data-pos="{{ $i }}"> {{--FIXME COLUNA  --}}
-
+                                {{-- NOTE Coluna completa --}}
+                                <div class="config-item mb-3 col-4" data-pos="{{ $i }}">
+                                  
                                     <div class="input-group">
-                                        <input type="text" name="price[]" value="50"
+                                        <input type="text" name="price[]" value="{{ $productConfigs[$i]->price ?? '' }}"
                                             class="form-control" placeholder="Preço $$">
                                         <a class="btn btn-outline-success btn-sm btn-add-opt">
                                             <i class="material-icons">add</i></a>
@@ -155,9 +158,9 @@
                                                 $parameterOption = $configParameters[$z] ?? false;
                                             @endphp
 
-                                            {{-- REVIEW Linha das optons --}}
-                                            <div class="parameter-item">{{--FIXME LINHAS--}}
-                                                <div class="input-group">
+                                            {{-- Linha das optons --}}
+                                            <div class="parameter-item">
+                                                <div class="input-group item-select">
 
                                                     {{-- @dd($parameterOption->id); --}}
                                                     <select name="parameters_options_{{ $i }}[]"
@@ -167,7 +170,8 @@
 
                                                         @foreach ($paramentersOptions as $k => $paramOpt)
 
-                                                            <option {!! $k == 0 ? 'selected="selected"': '' !!} value="{{ $paramOpt->id }}" {!! $parameterOption && $parameterOption->id == $paramOpt->id ? 'selected="selected"' : '' !!}>
+                                                            <option {!! $k == 0 ? 'selected="selected"': '' !!} 
+                                                            value="{{ $paramOpt->id }}" {!! $parameterOption && $parameterOption->id == $paramOpt->id ? 'selected="selected"' : '' !!}>
                                                                 {{ $paramOpt->name }}
                                                             </option>
 
@@ -175,8 +179,8 @@
 
                                                     </select>
 
-                                                    <a class="btn btn-outline-warning btn-sm btn-remove-parameter">
-                                                        <i class="material-icons">delete</i></a>
+                                                    <a class="btn btn-outline-danger btn-sm btn-remove-parameter">
+                                                        <i class="material-icons">delete_outline</i></a>
                                                 </div>
                                             </div>
 

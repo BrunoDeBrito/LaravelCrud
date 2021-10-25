@@ -50,49 +50,35 @@ $(function() {
         $table.on('click', 'tr td .btn-remove-option', function() {
 
             if ($(this).closest('tbody').find('tr').length > 1) {
-                $(this).closest('tr').remove();
-            }
 
+                $(this).closest('tr').remove(); 
+            }
         });
 
     });
 
     $('main.products.create-edit').each(function() {
 
-        //REVIEW Quando clicar para adicionar uma uma configuração. clonar a ja existente.
-        //REVIEW e quando clicar para adicionar um novo parametro clonar o parametro existente.
-
-        //TODO Criar Coluna dos preço  => coluna
-        //TODO Criar Coluna das opções => linha
         var $self = $(this);
 
-        var $configItem = $self.find('.config-item').first().clone();
-        var $configParam = $configItem.find('.parameter-item').first().clone();
+        var $configItem     = $self.find('.config-item').first().clone();
+        var $configParam    = $configItem.find('.parameter-item').first().clone();
         var incrementConfig = $self.find('.config-item').length;
-
-        console.log(incrementConfig);
-
-        incrementConfig = incrementConfig > 0 ? (incrementConfig - 1) : 0;
-
-        console.log(incrementConfig);
-
+        //Incremetador
+        incrementConfig     = incrementConfig > 0 ? (incrementConfig - 1) : 0;
 
         $configItem.find('.parameter-item').remove();
         $configItem.find('input[name="price[]"]').val('');
         $configParam.find('.form-select option:selected').removeAttr('selected');
 
-        // $configItem.find('.config-parameters').append($configParam);
+        var $btnAddConf         = $self.find('.btn-add-config');
+        var $btnAddOpt          = $self.find('.btn-add-opt');
+        var $productConfigList  = $self.find('.product-config-list');
 
-        var $btnAddConf = $self.find('.btn-add-config');
-        var $btnAddOpt  = $self.find('.btn-add-opt');
-        var $productConfigList = $self.find('.product-config-list');
-
-        $btnAddConf.find('input').val('');
-        
         $btnAddConf.on('click' , function() {
 
-            if ($btnAddConf.find('.config-item').length < 6) {
-                
+            if ($btnAddConf.find('.config-item').length < 3) {
+
                 incrementConfig++;
 
                 //Obtém a nova configuração. 
@@ -108,11 +94,13 @@ $(function() {
                 //Adiciona a nova configuração.
                 $productConfigList.append($item);
 
-                //todo quando clicar para adicionar o parametro.
+                // quando clicar para adicionar o parametro.
                 $item.find('.btn-add-opt').on('click', function () {
+
                     var $paramClean = $newParam.clone();
                     $paramClean.find('.form-select option:selected').removeAttr('selected');
                     $item.find('.config-parameters').append($paramClean);
+
                 });
 
             }
@@ -124,27 +112,42 @@ $(function() {
             var $elem = $(this);
             var $parentConfigItem = $elem.closest('.config-item');
             var pos = $parentConfigItem.attr('data-pos');
+ 
+            if ($btnAddOpt.closest('.config-item')) {
 
-            var $newParam = $configParam.clone();
-
-            //Incrementa no parameters_options_{$k}[]
-            $newParam.find('.form-select').attr('name', 'parameters_options_'+pos+'[]');
-
-            $parentConfigItem.find('.config-parameters').append($newParam);
+                var $newParam = $configParam.clone();
+    
+                //Incrementa no parameters_options_{$k}[]
+                $newParam.find('.form-select').attr('name', 'parameters_options_'+pos+'[]');
+    
+                $parentConfigItem.find('.config-parameters').append($newParam);
+            };
 
         });
 
-        //TODO Remover Itens da coluna => Preço
-        //TODO Remover Itens da linha  => Opções
         var $btnRemoveConf = $self.find('.btn-remove-config');
         var $btnRemoveOpt  = $self.find('.btn-remove-parameter');
 
         $btnRemoveConf.on('click' , function() {
-            alert('Removeu a coluna');
+
+            //FIXME
+            if ($(this).closest('.config-item').find('.table-responsive')) {
+
+                $(this).closest('.config-item').remove();
+                alert('Removido com sucesso');
+            }
+
         });
 
         $btnRemoveOpt.on('click' , function() {
-            alert('Removeu na linha');
+
+            //FIXME
+            if ($(this).closest('.product-config-list').find('.config-parameters')) {
+
+                $(this).closest('.parameter-item').remove();
+
+            }
+
         });
     });
 

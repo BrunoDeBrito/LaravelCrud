@@ -20,8 +20,8 @@ class CreateProductConfigOptionsTable extends Migration
             $table->foreignId('product_config_id');
             $table->foreignId('parameter_option_id');
 
-            $table->foreign('product_config_id')->references('id')->on('product_configs');
-            $table->foreign('parameter_option_id')->references('id')->on('parameters_options');
+            $table->foreign('product_config_id')->references('id')->on('product_configs')->onDelete('cascade');
+            $table->foreign('parameter_option_id')->references('id')->on('parameters_options')->onDelete('cascade');
 
         });
     }

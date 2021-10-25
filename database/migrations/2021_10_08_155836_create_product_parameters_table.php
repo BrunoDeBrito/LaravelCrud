@@ -21,7 +21,7 @@ class CreateProductParametersTable extends Migration
             $table->foreignId('products_id');
             $table->foreignId('parameter_id');
 
-            $table->foreign('parameter_id')->references('id')->on('parameters');
+            $table->foreign('parameter_id')->references('id')->on('parameters')->onDelete('cascade');
             $table->foreign('products_id')->references('id')->on('products');
         });
     }

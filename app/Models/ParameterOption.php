@@ -42,18 +42,4 @@ class ParameterOption extends Model
         ->orderBy('id', 'asc');
     }
 
-    public function configParameterOption() {
-
-        // return $this->belongsToMany(
-
-        //     'App\Models\ParameterOption', 
-        //     'product_config_options', 
-        //     'product_config_id', 
-        //     'parameter_option_id'
-
-        // );
-
-    }
-
-    
 }

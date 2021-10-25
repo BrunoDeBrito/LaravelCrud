@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-4">
                 <label for="exampleFormControlInput1" class="form-label">Nome da Categoria</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="Tipo de Categoria" value="{{ $category->name }}">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Tipo de Categoria" value="{{ old('name', $category->name) }}">
             </div>
         </div>
 

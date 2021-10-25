@@ -18,6 +18,8 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nome</th>
+                    <th scope="col">Criação</th>
+                    <th scope="col">Atualização</th>
                     <th scope="col">Parâmetros Opcionais</th>
                     <th scope="col">Ações</th>
                 </tr>
@@ -30,7 +32,9 @@
                     <tr>
                         <td>{{ $parameter->id }}</td>
                         <td>{{ $parameter->name }}</td>
-                        <td><a type="button" class="btn btn-outline-success" href="{{ url('parametros/' . $parameter->id . '/editar') }}">Opções dos Prâmetros</a></td>
+                        <td>{{ $parameter->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $parameter->updated_at->format('d/m/Y H:i') }}</td>
+                        <td><a type="button" class="btn btn-outline-info" href="{{ url('parametros/' . $parameter->id . '/editar') }}">Opções dos Prâmetros</a></td>
                         <td>
                             <a class="btn btn-primary btn-sm" href="{{ url('parametros/' . $parameter->id . '/editar') }}">
                                 <i class="material-icons">edit</i></a>
