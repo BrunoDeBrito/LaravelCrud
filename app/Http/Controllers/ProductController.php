@@ -181,7 +181,7 @@ class ProductController extends Controller
 			// Cria e Atualiza as configurações dos produtos
 			$parameterOptionsIds = [];
 
-
+			$configsIds = [];
 
 			foreach ($request->price as $k => $priceProduct) {
 
@@ -196,33 +196,49 @@ class ProductController extends Controller
 					$configProd->product_id = $product->id;
 				}
 
-				$configProd->price = $priceProduct;		
-
+				$configProd->price = $priceProduct;
 				$configProd->save();
+
+				array_push($configsIds, $configProd->id);
 
 				//Pega os Options e compara cons os Id's  0 : 1 / 1:3 -> exemplo
 				$parameterOptionsIds = $request->input("parameters_options_" . $k) ?? null;
-				$productConfigOption = $configProd->parametersOptions;
 
-				//NOTE salva todos os parametro optin relacionados a config do produto
-				$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
-
-				//Obtém os parametros que serão removidos.
-				$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
-
-				//Obtém os parametros que serão inseridos.
-				$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
+				$configProd->parametersOptions()->detach();
+				$configProd->parametersOptions()->attach($parameterOptionsIds);
 
 
-				if (count($productConfigsToInsert)) {
-					$configProd->parametersOptions()->attach($productConfigsToInsert);
-				}
 
-				if (count($productConfigsToRemove)) {
-					$configProd->parametersOptions()->detach($productConfigsToRemove);
-				}
+
+				//Pega na Model os parametersOptions descrito la.
+				/*
+					$productConfigOption = $configProd->parametersOptions;
+
+					//NOTE salva todos os parametro optin relacionados a config do produto
+					$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
+					
+					//Obtém os parametros que serão removidos.
+					$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
+					
+					//Obtém os parametros que serão inseridos.
+					$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
+
+					// Verifica se ah algo a ser inserido.
+					if (count($productConfigsToInsert)) {
+
+						$configProd->parametersOptions()->attach($productConfigsToInsert);
+					}
+
+					if (count($productConfigsToRemove)) {
+
+						$configProd->parametersOptions()->detach($productConfigsToRemove);
+					}
+				*/
+
 
 			}
+
+			ProductConfig::where('product_id', $product->id)->whereNotIn('id', $configsIds)->delete();
 
 			DB::commit();
 
