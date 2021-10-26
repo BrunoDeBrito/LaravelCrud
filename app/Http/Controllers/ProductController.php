@@ -199,6 +199,14 @@ class ProductController extends Controller
 				$configProd->price = $priceProduct;
 				$configProd->save();
 
+				/**
+				 * 
+				 * NOTE  Onde vai pegar as configurações dos parametros
+				 * buscar no banco e verificar quais serão Add ou Updt
+				 * modificar, e "excluir os que não vieram".
+				 * Caso ah apenas um ou mais pra remover ele remove. 
+				 * 
+				 */
 				array_push($configsIds, $configProd->id);
 
 				//Pega os Options e compara cons os Id's  0 : 1 / 1:3 -> exemplo
@@ -209,10 +217,10 @@ class ProductController extends Controller
 
 				//NOTE salva todos os parametro optin relacionados a config do produto
 				$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
-				
+
 				//Obtém os parametros que serão removidos.
 				$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
-				
+
 				//Obtém os parametros que serão inseridos.
 				$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
 
@@ -226,9 +234,6 @@ class ProductController extends Controller
 
 					$configProd->parametersOptions()->detach($productConfigsToRemove);
 				}
-				
-
-
 			}
 
 			ProductConfig::where('product_id', $product->id)->whereNotIn('id', $configsIds)->delete();
