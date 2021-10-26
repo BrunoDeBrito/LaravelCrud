@@ -1,6 +1,6 @@
 'use strict';
 $(function() {
-    
+
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     $('.btn-remove').on('click', function() {
@@ -58,6 +58,7 @@ $(function() {
     });
 
     $('main.products.create-edit').each(function() {
+        
 
         var $self = $(this);
 
@@ -68,7 +69,7 @@ $(function() {
         incrementConfig     = incrementConfig > 0 ? (incrementConfig - 1) : 0;
 
         $configItem.find('.parameter-item').remove();
-        $configItem.find('input[name="price[]"]').val('');
+        $configItem.find('input').val('');
         $configParam.find('.form-select option:selected').removeAttr('selected');
 
         var $btnAddConf         = $self.find('.btn-add-config');
@@ -150,5 +151,6 @@ $(function() {
 
         });
     });
+
 
 });//* {{ END }}

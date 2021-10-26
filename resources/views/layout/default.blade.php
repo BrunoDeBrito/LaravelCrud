@@ -65,7 +65,10 @@
     </script>
 
     <script 
-        src="{{ asset('assets/js/main.js') }}">
+        src="{{ asset('assets/js/main.js') }}" >
+    </script>
+    <script 
+        src="{{ asset('assets/js/maskJquery/dist/jquery.mask.js') }}" >
     </script>
 
 </body>

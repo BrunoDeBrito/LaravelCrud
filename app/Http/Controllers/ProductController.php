@@ -181,39 +181,47 @@ class ProductController extends Controller
 			// Cria e Atualiza as configurações dos produtos
 			$parameterOptionsIds = [];
 
+
+
 			foreach ($request->price as $k => $priceProduct) {
 
-				
-				// if ($priceProduct) {
-					
-					//Buca os preços para fazer alteração
-				// 	$configProd = ProductConfig::where($request->price)->first();
-				// 	dd($configProd);
+				//Obtém id das config_products quando é uma edição.
+				if (isset($request->pricesIds[$k])) {
 
-				// } else {
+					$configProd = ProductConfig::find($request->pricesIds[$k]);
 
-					
-				// }
-					//Salva os preço com a ref do produto
+				} else {
+
 					$configProd = new ProductConfig();
-				
-				$configProd->product_id = $product->id;
-				$configProd->price = $priceProduct;
+					$configProd->product_id = $product->id;
+				}
+
+				$configProd->price = $priceProduct;		
+
 				$configProd->save();
 
 				//Pega os Options e compara cons os Id's  0 : 1 / 1:3 -> exemplo
 				$parameterOptionsIds = $request->input("parameters_options_" . $k) ?? null;
+				$productConfigOption = $configProd->parametersOptions;
 
 				//NOTE salva todos os parametro optin relacionados a config do produto
-				foreach ($parameterOptionsIds as $po) {
+				$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
 
-					//criar model product_config_options
-					$productConfigOption = new ProductConfigOption();
-					$productConfigOption->product_config_id   = $configProd->id;
-					$productConfigOption->parameter_option_id = $po;
+				//Obtém os parametros que serão removidos.
+				$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
+
+				//Obtém os parametros que serão inseridos.
+				$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
+
+
+				if (count($productConfigsToInsert)) {
+					$configProd->parametersOptions()->attach($productConfigsToInsert);
 				}
-				
-				$productConfigOption->save();
+
+				if (count($productConfigsToRemove)) {
+					$configProd->parametersOptions()->detach($productConfigsToRemove);
+				}
+
 			}
 
 			DB::commit();

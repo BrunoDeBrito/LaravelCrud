@@ -42,6 +42,7 @@
                         array_push(
                             $productConfigs,
                             (object) [
+                                'id' => $config->id,
                                 'price' => $config->price,
                                 'parametersOptions' => $config->parametersOptions,
                             ],
@@ -119,10 +120,13 @@
 
                                 {{-- NOTE Coluna completa --}}
                                 <div class="config-item mb-3 col-4" data-pos="{{ $i }}">
-                                  
-                                    <div class="input-group">
-                                        <input type="text" name="price[]" value="{{ $productConfigs[$i]->price ?? '' }}"
-                                            class="form-control" placeholder="Preço $$">
+                                    
+                                    <input name="pricesIds[]" hidden value="{{ $productConfigs[$i]->id ?? '' }}">
+                                    <div class="input-group">                                        
+                                        <input 
+                                            type="text" name="price[]" 
+                                            value="{{ $productConfigs[$i]->price ?? '' }}"
+                                            class="form-control money" placeholder="Preço $$"/>
                                         <a class="btn btn-outline-success btn-sm btn-add-opt">
                                             <i class="material-icons">add</i></a>
                                         <a class="btn btn-danger btn-sm btn-remove-config">
@@ -162,14 +166,13 @@
                                             <div class="parameter-item">
                                                 <div class="input-group item-select">
 
-                                                    {{-- @dd($parameterOption->id); --}}
                                                     <select name="parameters_options_{{ $i }}[]"
                                                         class="form-select">
 
                                                         <option value="">Selecione uma Opção</option>
 
                                                         @foreach ($paramentersOptions as $k => $paramOpt)
-
+                                                        
                                                             <option {!! $k == 0 ? 'selected="selected"': '' !!} 
                                                             value="{{ $paramOpt->id }}" {!! $parameterOption && $parameterOption->id == $paramOpt->id ? 'selected="selected"' : '' !!}>
                                                                 {{ $paramOpt->name }}
