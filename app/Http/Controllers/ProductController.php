@@ -204,36 +204,29 @@ class ProductController extends Controller
 				//Pega os Options e compara cons os Id's  0 : 1 / 1:3 -> exemplo
 				$parameterOptionsIds = $request->input("parameters_options_" . $k) ?? null;
 
-				$configProd->parametersOptions()->detach();
-				$configProd->parametersOptions()->attach($parameterOptionsIds);
-
-
-
-
 				//Pega na Model os parametersOptions descrito la.
-				/*
-					$productConfigOption = $configProd->parametersOptions;
+				$productConfigOption = $configProd->parametersOptions;
 
-					//NOTE salva todos os parametro optin relacionados a config do produto
-					$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
-					
-					//Obtém os parametros que serão removidos.
-					$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
-					
-					//Obtém os parametros que serão inseridos.
-					$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
+				//NOTE salva todos os parametro optin relacionados a config do produto
+				$productConfigOptionIds = array_column($productConfigOption->toArray(), 'id');
+				
+				//Obtém os parametros que serão removidos.
+				$productConfigsToRemove = array_diff($productConfigOptionIds, $parameterOptionsIds);
+				
+				//Obtém os parametros que serão inseridos.
+				$productConfigsToInsert = array_diff($parameterOptionsIds, $productConfigOptionIds);
 
-					// Verifica se ah algo a ser inserido.
-					if (count($productConfigsToInsert)) {
+				// Verifica se ah algo a ser inserido.
+				if (count($productConfigsToInsert)) {
 
-						$configProd->parametersOptions()->attach($productConfigsToInsert);
-					}
+					$configProd->parametersOptions()->attach($productConfigsToInsert);
+				}
 
-					if (count($productConfigsToRemove)) {
+				if (count($productConfigsToRemove)) {
 
-						$configProd->parametersOptions()->detach($productConfigsToRemove);
-					}
-				*/
+					$configProd->parametersOptions()->detach($productConfigsToRemove);
+				}
+				
 
 
 			}
