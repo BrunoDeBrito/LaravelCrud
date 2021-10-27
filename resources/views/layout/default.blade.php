@@ -65,10 +65,11 @@
     </script>
 
     <script 
-        src="{{ asset('assets/js/main.js') }}" >
+        src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
     </script>
+
     <script 
-        src="{{ asset('assets/js/maskJquery/dist/jquery.mask.js') }}" >
+        src="{{ asset('assets/js/main.js') }}" >
     </script>
 
 </body>

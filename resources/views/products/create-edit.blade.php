@@ -142,7 +142,6 @@
                                             //NOTE  Pega as Opções do parametro ->
                                             //comparação com o produto, e retorna as opçoões
                                             if ($config && $config->parametersOptions) {
-                                                // dd($config);
                                             
                                                 foreach ($config->parametersOptions as $optionId) {
                                                     array_push(
@@ -162,7 +161,7 @@
                                                 $parameterOption = $configParameters[$z] ?? false;
                                             @endphp
 
-                                            {{-- Linha das optons --}}
+                                            {{-- Linha dos options --}}
                                             <div class="parameter-item">
                                                 <div class="input-group item-select">
 
