@@ -148,7 +148,9 @@ class ProductController extends Controller
 		$paramenters = Parameter::orderBy('id', 'asc')->get();
 
 		// Obtem os parametros Opcionais
-		$paramentersOptions = ParameterOption::orderBy('id', 'asc')->get();
+		$paramentersOptions = ParameterOption::from("parameters_options as po")
+		->select("po.*", DB::raw("CONCAT(p.name, ' - ', po.name) as name"))->orderBy('id', 'asc')->join('parameters as p', 'p.id', 'po.parameter_id')
+		->get();
 
 		return view('products.create-edit', [
 
