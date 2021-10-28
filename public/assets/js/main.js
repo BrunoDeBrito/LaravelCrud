@@ -87,12 +87,12 @@ $(function() {
 
         $btnAddConf.on('click' , function() {
 
-            if (incrementConfig < 6) {
-                
+            if ($btnAddConf.find('.config-item').length < 3) {
+
                 incrementConfig++;
-                
+
                 //Obtém a nova configuração. 
-                var $item = $configItem.clone().eq(0);
+                var $item = $configItem.clone();
                 $item.attr('data-pos', incrementConfig);
                 var $newParam = $configParam.clone();
 
@@ -107,14 +107,9 @@ $(function() {
                 // quando clicar para adicionar o parametro.
                 $item.find('.btn-add-opt').on('click', function () {
 
-                    // if ( incrementConfig < 8) {
-                        
-                        // incrementConfig ++;
-
-                        var $paramClean = $newParam.clone();
-                        $paramClean.find('.form-select option:selected').removeAttr('selected');
-                        $item.find('.config-parameters').append($paramClean);
-                    // }
+                    var $paramClean = $newParam.clone();
+                    $paramClean.find('.form-select option:selected').removeAttr('selected');
+                    $item.find('.config-parameters').append($paramClean);
 
                 });
 
@@ -157,46 +152,41 @@ $(function() {
 
         $btnAddOpt.on('click' , function() {
 
-            // if (incrementConfig < 8) {
+            var $elem = $(this);
+            var $parentConfigItem = $elem.closest('.config-item');
+            var pos = $parentConfigItem.attr('data-pos');
 
-                // incrementConfig ++;
+            if ($btnAddOpt.closest('.config-item')) {
 
-                var $elem = $(this);
-                var $parentConfigItem = $elem.closest('.config-item');
-                var pos = $parentConfigItem.attr('data-pos');
+                var $newParam = $configParam.clone();
 
-                if ($btnAddOpt.closest('.config-item')) {
+                //Incrementa no parameters_options_{$k}[]
+                $newParam.find('.form-select').attr('name', 'parameters_options_'+pos+'[]');
 
-                    var $newParam = $configParam.clone();
+                $parentConfigItem.find('.config-parameters').append($newParam);
 
-                    //Incrementa no parameters_options_{$k}[]
-                    $newParam.find('.form-select').attr('name', 'parameters_options_'+pos+'[]');
+                $newParam.find('.btn-remove-parameter').on('click', function() {
 
-                    $parentConfigItem.find('.config-parameters').append($newParam);
+                    $(this).closest('.parameter-item').remove();
 
-                    $newParam.find('.btn-remove-parameter').on('click', function() {
-
-                        $(this).closest('.parameter-item').remove();
-
-                        swal({
-                            title : "Opção removido!",
-                            text  : "Sua configuração foi Removida com sucesso",
-                            icon  : "success",
-                            button     : false,
-                            closeModal : true,
-                            timer      : 2000,
-                        });
-
+                    swal({
+                        title : "Opção removido!",
+                        text  : "Sua configuração foi Removida com sucesso",
+                        icon  : "success",
+                        button     : false,
+                        closeModal : true,
+                        timer      : 2000,
                     });
 
-                };
-                
-            // }
+                });
+
+            };
 
         });
     
         $btnRemoveConf.on('click' , function() {
 
+            //FIXME
             if ($(this).closest('.config-item').find('.table-responsive')) {
 
                 $(this).closest('.config-item').remove();
@@ -215,6 +205,7 @@ $(function() {
 
         $btnRemoveParam.on('click' , function() {
 
+            //FIXME
             if ($(this).closest('.product-config-list').find('.config-parameters')) {
 
                 $(this).closest('.parameter-item').remove();
