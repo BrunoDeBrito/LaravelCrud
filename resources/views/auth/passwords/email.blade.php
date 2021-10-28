@@ -1,12 +1,12 @@
 @extends('layout.default')
 
-@section('content')
+@section('login')
 
     <div class="row justify-content-center">
         <div class="col-md-8 mt-4">
             <div class="card">
 
-                <div class="card-header">{{ __('Esqueci minha senha') }}</div>
+                <div class="card-header text-white bg-primary">{{ __('Esqueci minha senha') }}</div>
 
                 <div class="card-body">
 
@@ -22,12 +22,13 @@
                         @csrf
 
                         <div class="form-group row">
-                            
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
+
+                            <label for="email" class="col-md-3 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                             <div class="col-md-6">
 
-                                <input id="email" placeholder="mail@exemple.com" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="email" type="email" placeholder="mail@exemple.com" class="form-control @error('email') is-invalid @enderror"
+                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
 
@@ -40,12 +41,17 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
+                        <div class="form-group row mb-0 mt-3">
+                            <div class="col-md-6 offset-md-4">
 
-                            <div class="col-md-6 offset-md-4 mt-2">
+                                <a href="{{ route('login') }}" class="btn btn-light">
+                                    {{ __('Voltar') }}
+                                </a>
+
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Esqueci minha senha') }}
+                                    {{ __('Enviar') }}
                                 </button>
+
                             </div>
                         </div>
 

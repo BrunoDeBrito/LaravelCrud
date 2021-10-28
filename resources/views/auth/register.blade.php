@@ -1,21 +1,22 @@
 @extends('layout.default')
 
-@section('content')
+@section('login')
 
     <div class="row justify-content-center">
 
         <div class="col-md-8 mt-4">
             <div class="card">
 
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header text-white bg-primary ">{{ __('Registrar') }}</div>
 
                 <div class="card-body">
+
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <div class="form-group row mt-1">
 
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nome') }}</label>
+                            <label for="name" class="col-md-3 col-form-label text-md-right">{{ __('Nome') }}</label>
 
                             <div class="col-md-6">
 
@@ -36,12 +37,13 @@
 
                         <div class="form-group row mt-1">
 
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
+                            <label for="email"
+                                class="col-md-3 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" placeholder="mail@exemple.com"
-                                    class="form-control @error('email') is-invalid @enderror" name="email"
-                                    value="{{ old('email') }}" required autocomplete="email">
+
+                                <input id="email" type="email" placeholder="mail@exemple.com" class="form-control @error('email') is-invalid @enderror"
+                                    name="email" value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
 
@@ -56,7 +58,8 @@
 
                         <div class="form-group row mt-1">
 
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Senha') }}</label>
+                            <label for="password"
+                                class="col-md-3 col-form-label text-md-right">{{ __('Senha') }}</label>
 
                             <div class="col-md-6">
 
@@ -78,20 +81,25 @@
                         <div class="form-group row mt-1">
 
                             <label for="password-confirm"
-                                class="col-md-4 col-form-label text-md-right">{{ __('Confirme Sua Senha') }}</label>
+                                class="col-md-3 col-form-label text-md-right">{{ __('Confirme sua senha') }}</label>
 
                             <div class="col-md-6">
+
                                 <input id="password-confirm" type="password" class="form-control"
                                     name="password_confirmation" required autocomplete="new-password">
+
                             </div>
                         </div>
 
-                        <div class="form-group row mt-3 mb-0">
-
+                        <div class="form-group row mb-0 mt-3">
                             <div class="col-md-6 offset-md-4">
 
+                                <a href="{{ route('login') }}" class="btn btn-light">
+                                    {{ __('Voltar') }}
+                                </a>
+
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                                    {{ __('Salvar') }}
                                 </button>
 
                             </div>

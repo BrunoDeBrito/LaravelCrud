@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+
+Route::get('/home', function () {
     return view('welcome');
 });
 
@@ -26,7 +27,7 @@ Route::get('/', function () {
     Route::get('/categorias/{id}/editar',   'CategoryController@edit');
     Route::put('/categorias',               'CategoryController@update');
     Route::delete('/categorias',            'CategoryController@delete');
-    
+
     //Rota de Produtos
     Route::get('/produtos',                 'ProductController@index');
     Route::get('/produto/criar',            'ProductController@create');
@@ -34,18 +35,19 @@ Route::get('/', function () {
     Route::get('/produtos/{id}/editar',     'ProductController@edit');
     Route::put('/produtos',                 'ProductController@update');
     Route::delete('/produtos',              'ProductController@delete');
-    
-    //Rota de Paramentros
-    Route::get('/parametros',                 'ParameterController@index');
-    Route::get('/parametros/criar',           'ParameterController@create');
-    Route::post('/parametros',                'ParameterController@insert');
-    Route::get('/parametros/{id}/editar',     'ParameterController@edit');
-    Route::put('/parametros',                 'ParameterController@update');
-    Route::delete('/parametros',              'ParameterController@delete');
-    
-// });
 
+    //Rota de Paramentros
+    Route::get('/parametros',               'ParameterController@index');
+    Route::get('/parametros/criar',         'ParameterController@create');
+    Route::post('/parametros',              'ParameterController@insert');
+    Route::get('/parametros/{id}/editar',   'ParameterController@edit');
+    Route::put('/parametros',               'ParameterController@update');
+    Route::delete('/parametros',            'ParameterController@delete');
+
+// });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
