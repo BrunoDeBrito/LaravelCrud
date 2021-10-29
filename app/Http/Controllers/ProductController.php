@@ -12,8 +12,10 @@ use App\Models\ParameterOption;
 use App\Models\ProductConfigOption;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
 /**
  * Controller de Produtos
  *
@@ -29,7 +31,8 @@ class ProductController extends Controller
 	 *
 	 * @return void
 	 */
-	public function index(Request $request) { 
+	public function index(Request $request) {
+
 
 		$products = Product::search($request)
 			->orderBy('id', 'asc')
@@ -44,7 +47,7 @@ class ProductController extends Controller
 	 * @param Product $products
 	 * @return void
 	 */
-	public function create(Request $request) { 
+	public function create(Request $request) {
 
 		return $this->form($request, new Product());
 	}
@@ -55,7 +58,7 @@ class ProductController extends Controller
 	 * @param Request $request
 	 * @return response
 	 */
-	public function insert(Request $request) { 
+	public function insert(Request $request) {		
 
 		try {
 
@@ -84,7 +87,7 @@ class ProductController extends Controller
 	 ** Apresenta formulario de atualização dos Produtos
 	 *compact('products')
 	 */
-	public function edit(Request $request, $id) { 
+	public function edit(Request $request, $id) {
 
 		$product = Product::find($id);
 
@@ -105,7 +108,7 @@ class ProductController extends Controller
 	 * @param interger $id
 	 * @return void
 	 */
-	public function update(Request $request) { 
+	public function update(Request $request) {
 
 		try {
 
@@ -139,7 +142,7 @@ class ProductController extends Controller
 	 *
 	 * @return void
 	 */
-	private function form($request, $product) { 
+	private function form($request, $product) {
 
 		// Obtem a lista de categorias
 		$categories = Category::orderBy('id', 'asc')->get();
@@ -165,7 +168,7 @@ class ProductController extends Controller
 	 *
 	 * @return void
 	 */
-	private function save($request, $product) { 
+	private function save($request, $product) {
 
 		try {
 
@@ -188,7 +191,6 @@ class ProductController extends Controller
 				if (isset($request->pricesIds[$k])) {
 
 					$configProd = ProductConfig::find($request->pricesIds[$k]);
-
 				} else {
 
 					$configProd = new ProductConfig();
@@ -238,7 +240,6 @@ class ProductController extends Controller
 			ProductConfig::where('product_id', $product->id)->whereNotIn('id', $configsIds)->delete();
 
 			DB::commit();
-
 		} catch (Exception $e) {
 
 			DB::rollback();
@@ -252,7 +253,7 @@ class ProductController extends Controller
 	 * @param [type] $request
 	 * @return object
 	 */
-	private function validator($request) { 
+	private function validator($request) {
 
 		$validator = Validator::make($request->all(), [
 
@@ -273,7 +274,8 @@ class ProductController extends Controller
 	 * @param interger $id
 	 * @return void
 	 */
-	public function delete(Request $request) { 
+	public function delete(Request $request) {
+
 
 		try {
 

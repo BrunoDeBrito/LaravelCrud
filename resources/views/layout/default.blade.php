@@ -15,91 +15,92 @@
 </head>
 
 <body>
-    {{-- @auth --}}
-        <header>
-            
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div class="container">
+    @auth
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+    <header>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
 
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/">Home</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('categorias') }}">Categorias</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('categorias') }}">Categorias</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('produtos') }}">Produtos</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('produtos') }}">Produtos</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('parametros') }}">Parametros</a>
-                            </li>
-                            
-                        </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('parametros') }}">Parametros</a>
+                        </li>
 
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    </ul>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ Auth::logout() }}">Sair</a>
-                            </li>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                            <li class="nav-item">
-                                <a class="nav-link">NOME</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-logout" href="#">Sair</a>
+                        </li>
 
-                        </ul>
+                        <li class="nav-item">
+                            <a class="nav-link">NOME</a>
+                        </li>
 
-                    </div>
+                    </ul>
 
                 </div>
-            </nav>
-        </header>
-    {{-- @endauth --}}
 
-    
-    <main class="{{ $mainClass ?? '' }}">
-        
-        <div class="container">
-            @yield('content')
-        </div>
-        
-    </main>    
+            </div>
+        </nav>
+    </header>
+@endauth
 
-    {{-- <main >
+<main class="{{ $mainClass ?? '' }}">
 
-        <div class="container">
-            @yield('login')
-        </div>
+    <div class="container">
+        @yield('content')
+    </div>
 
-    </main> --}}
+</main>
 
-    <footer></footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
-    </script>
+<main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
-        integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous">
-    </script>
+    <div class="container">
+        @yield('login')
+    </div>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
-    </script>
+</main>
 
-    <script src="{{ asset('assets/js/main.js') }}">
-    </script>
+<footer></footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
+integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous">
+</script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+</script>
+
+<script src="{{ asset('assets/js/main.js') }}">
+</script>
 
 </body>
 
