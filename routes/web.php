@@ -21,6 +21,7 @@ Route::get('/home', function () {
 Route::group([ 'middleware' => [ 'auth' ]], function () {
 
     // Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function () {
+        Route::get('/logout',                   'Auth\LoginController@logout');
 
         //Rota de Categorias
         Route::get('/categorias',               'CategoryController@index');
