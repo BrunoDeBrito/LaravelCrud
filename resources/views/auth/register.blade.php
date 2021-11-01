@@ -3,8 +3,22 @@
 @section('login')
 
     <div class="row justify-content-center">
-
         <div class="col-md-8 mt-4">
+
+            <div class="card text-center">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">ProdutosCleans LTDA</h5>
+                    <p class="card-text">Crie seu acesso, e veja nossas lojas</p>
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('assets/img/img.png') }}" style="width: 120px" class="rounded" alt="...">
+                    </div>
+
+                </div>
+
+            </div>
+
             <div class="card">
 
                 <div class="card-header text-white bg-primary ">{{ __('Registrar') }}</div>
@@ -37,13 +51,13 @@
 
                         <div class="form-group row mt-1">
 
-                            <label for="email"
-                                class="col-md-3 col-form-label text-md-right">{{ __('E-Mail') }}</label>
+                            <label for="email" class="col-md-3 col-form-label text-md-right">{{ __('E-Mail') }}</label>
 
                             <div class="col-md-6">
 
-                                <input id="email" type="email" placeholder="mail@exemple.com" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" placeholder="mail@exemple.com"
+                                    class="form-control @error('email') is-invalid @enderror" name="email"
+                                    value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
 
@@ -58,8 +72,7 @@
 
                         <div class="form-group row mt-1">
 
-                            <label for="password"
-                                class="col-md-3 col-form-label text-md-right">{{ __('Senha') }}</label>
+                            <label for="password" class="col-md-3 col-form-label text-md-right">{{ __('Senha') }}</label>
 
                             <div class="col-md-6">
 
